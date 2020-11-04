@@ -37,9 +37,11 @@
   },
   "dependencies": {
     "@types/classnames": "^2.2.11",
+    "@types/react-transition-group": "^4.4.0",
     "classnames": "^2.2.6",
     "firebase": "^7.20.0",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-transition-group": "^4.4.1"
   }
 }

@@ -8,10 +8,10 @@
   $background,
   $border,
   $color,
-  $hover-background: lighten($background, .75),
-  $hover-border: lighten($border, .1),
-  $hover-color: $color)
-{
+  $hover-background: lighten($background, 0.75),
+  $hover-border: lighten($border, 0.1),
+  $hover-color: $color
+) {
   color: $color;
   background: $background;
   border-color: $border;
