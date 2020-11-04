@@ -36,6 +36,9 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "@fortawesome/react-fontawesome": "^0.1.12",
     "@types/classnames": "^2.2.11",
     "@types/react-transition-group": "^4.4.0",
     "classnames": "^2.2.6",
