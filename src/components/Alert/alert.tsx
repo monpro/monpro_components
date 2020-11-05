@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react'
 import classnames from 'classnames'
-import Transition from "../Transition";
+import Transition from '../Transition'
+import Icon from "../Icon/icon";
 
 export type AlertType = 'success' | 'default' | 'danger' | 'warning'
 
@@ -33,8 +34,23 @@ export const Alert: FC<AlertProps> = (props) => {
   }
 
   return (
-      <Transition timeout={300}>
-
-      </Transition>
+    <Transition in={!!hide} timeout={300} animation={'zoom-in-top'}>
+      <div className={classes}>
+        <span className={titleClass}>{title}</span>
+        {description && <p className="mon-alert-desc">{{ description }}</p>}
+        {closable && (
+          <span className="mon-alert-close" onClick={handleClose}>
+            <Icon icon="times" />
+          </span>
+        )}
+      </div>
+    </Transition>
   )
 }
+
+Alert.defaultProps = {
+  type: "default",
+  closable: true
+}
+
+export default Alert
