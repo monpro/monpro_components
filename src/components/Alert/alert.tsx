@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react'
-import classnames from 'classnames'
+import classNames from 'classnames'
 import Transition from '../Transition'
-import Icon from "../Icon/icon";
+import Icon from '../Icon'
 
 export type AlertType = 'success' | 'default' | 'danger' | 'warning'
 
@@ -17,12 +17,11 @@ export const Alert: FC<AlertProps> = (props) => {
   const [hide, setHide] = useState(false)
 
   const { title, description, type, onClose, closable } = props
-
-  const classes = classnames('mon-alert', {
+  const classes = classNames('mon-alert', {
     [`mon-alert-${type}`]: type,
   })
 
-  const titleClass = classnames('mon-alert-title', {
+  const titleClass = classNames('mon-alert-title', {
     'bold-title': description,
   })
 
@@ -32,12 +31,11 @@ export const Alert: FC<AlertProps> = (props) => {
     }
     setHide(true)
   }
-
   return (
-    <Transition in={!!hide} timeout={300} animation={'zoom-in-top'}>
+    <Transition in={!hide} timeout={300} animation={'zoom-in-top'}>
       <div className={classes}>
         <span className={titleClass}>{title}</span>
-        {description && <p className="mon-alert-desc">{{ description }}</p>}
+        {description && <p className="mon-alert-desc">{description}</p>}
         {closable && (
           <span className="mon-alert-close" onClick={handleClose}>
             <Icon icon="times" />
@@ -49,8 +47,8 @@ export const Alert: FC<AlertProps> = (props) => {
 }
 
 Alert.defaultProps = {
-  type: "default",
-  closable: true
+  type: 'default',
+  closable: true,
 }
 
 export default Alert

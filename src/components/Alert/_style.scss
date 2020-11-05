@@ -1,11 +1,9 @@
-$alert-colors:
-(
-  "default": $primary,
-  "success": $success,
-  "warning": $warning,
-  "danger":  $danger
+$alert-colors: (
+  'default': $primary,
+  'success': $success,
+  'warning': $warning,
+  'danger': $danger,
 );
-
 .mon-alert {
   position: relative;
   padding: $alert-padding-y $alert-padding-x;
@@ -28,9 +26,8 @@ $alert-colors:
     margin: $alert-description-top-margin 0 0;
   }
 }
-
 @each $color, $value in $alert-colors {
   .mon-alert-#{$color} {
-    @include alert-style($value, darken($value, 5%), $white)
+    @include alert-style($value, darken($value, 5%), $white);
   }
 }
