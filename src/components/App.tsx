@@ -9,9 +9,11 @@ library.add(fas)
 const App = () => {
   return (
     <div>
-      <Menu defaultIndex={0}>
-        <MenuItem>link1</MenuItem>
-        <MenuItem>link2</MenuItem>
+      <Menu defaultIndex={0} onSelect={(index) => alert(index)}>
+        <MenuItem index={0}>link1</MenuItem>
+        <MenuItem index={1} disabled>
+          link2
+        </MenuItem>
       </Menu>
       <Button btnType={ButtonType.Primary} size={ButtonSize.Large}>
         test button
