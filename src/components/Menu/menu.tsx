@@ -24,6 +24,7 @@ const Menu: React.FC<MenuProps> = (props) => {
   const [activeIndex, setActiveIndex] = useState(defaultIndex)
   const classes = classNames('mon-menu', className, {
     'menu-vertical': mode === 'vertical',
+    'menu-horizontal': mode !== 'vertical',
   })
 
   const handleClick = (index: number) => {
@@ -44,9 +45,9 @@ const Menu: React.FC<MenuProps> = (props) => {
         MenuItemProps
       >
       const { displayName } = childElement.type
-      if (displayName === 'MenuItem') {
+      if (displayName === 'MenuItem' || displayName === 'SubMenu') {
         return React.cloneElement(childElement, {
-          index
+          index,
         })
       } else {
         console.error('menu has a child which is not MenuItem')

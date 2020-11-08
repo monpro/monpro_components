@@ -21,11 +21,12 @@
     &.is-active,
     &:hover {
       color: $menu-item-active-color;
-      border-bottom: $menu-item-active-border-width solid $menu-item-active-color;
+      border-bottom: $menu-item-active-border-width solid
+        $menu-item-active-color;
     }
   }
   .mon-submenu {
-    list-style:none;
+    list-style: none;
     padding-left: 0;
     white-space: nowrap;
     .menu-item {
@@ -33,7 +34,8 @@
       cursor: pointer;
       transition: $menu-transition;
       color: $body-color;
-      &.is-active, &:hover {
+      &.is-active,
+      &:hover {
         color: $menu-item-active-color !important;
       }
     }
@@ -45,7 +47,7 @@
       align-items: center;
     }
     .arrow-icon {
-      transition: transform .25s ease-in-out;
+      transition: transform 0.25s ease-in-out;
       margin-left: 3px;
     }
     &:hover {
@@ -61,7 +63,6 @@
     }
     &.is-opened {
       transform: rotate(180deg) !important;
-
     }
   }
 }
@@ -80,7 +81,6 @@
     box-shadow: $submenu-box-shadow;
   }
 }
-
 
 .menu-vertical {
   flex-direction: column;

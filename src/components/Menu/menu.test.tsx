@@ -23,9 +23,7 @@ const getMenu = (props: MenuProps) => {
   return (
     <Menu {...props}>
       <MenuItem>active item 1</MenuItem>
-      <MenuItem disabled>
-        disabled item 2
-      </MenuItem>
+      <MenuItem disabled>disabled item 2</MenuItem>
       <MenuItem>test item 3</MenuItem>
     </Menu>
   )
