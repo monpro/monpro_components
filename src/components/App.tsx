@@ -10,7 +10,7 @@ library.add(fas)
 const App = () => {
   return (
     <div>
-      <Menu defaultIndex={0} mode='vertical'>
+      <Menu mode='vertical' onSelect={(i) => console.log(i)} defaultOpenSubMenus={['2']}>
         <MenuItem>link1</MenuItem>
         <MenuItem disabled>link2</MenuItem>
         <SubMenu title="test sub menu">
