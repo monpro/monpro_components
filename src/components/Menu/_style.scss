@@ -29,7 +29,7 @@
     list-style: none;
     padding-left: 0;
     white-space: nowrap;
-    .menu-item {
+    .mon-menu-item {
       padding: $menu-item-padding-y $menu-item-padding-x;
       cursor: pointer;
       transition: $menu-transition;
@@ -40,7 +40,7 @@
       }
     }
   }
-  .submenu-item {
+  .mon-submenu-item {
     position: relative;
     .submenu-title {
       display: flex;
@@ -67,7 +67,7 @@
   }
 }
 
-.menu-horizontal {
+.mon-menu-horizontal {
   .mon-menu-item {
     border-bottom: $menu-item-active-border-width solid transparent;
   }
@@ -82,7 +82,7 @@
   }
 }
 
-.menu-vertical {
+.mon-menu-vertical {
   flex-direction: column;
   border-bottom: 0;
   border-right: $menu-border-width solid $menu-border-color;

@@ -16,7 +16,7 @@ const SubMenu: React.FC<SubMenuProps> = ({
   className,
 }) => {
   const context = useContext(MenuContext)
-  const classes = classNames('mon-menu-item submenu-item', className, {
+  const classes = classNames('mon-menu-item mon-submenu-item', className, {
     'is-active': context.index === index,
   })
   const renderChildren = () => {

@@ -65,6 +65,6 @@ describe('test Menu and MenuItem', () => {
     cleanup()
     const wrapper = render(getMenu(testVerticalProps))
     const menu = wrapper.getByTestId('test-menu')
-    expect(menu).toHaveClass('menu-vertical')
+    expect(menu).toHaveClass('mon-menu-vertical')
   })
 })
