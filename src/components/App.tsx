@@ -10,7 +10,7 @@ library.add(fas)
 const App = () => {
   return (
     <div>
-      <Menu defaultIndex={0} onSelect={(index) => alert(index)}>
+      <Menu defaultIndex={0} mode='vertical'>
         <MenuItem>link1</MenuItem>
         <MenuItem disabled>link2</MenuItem>
         <SubMenu title="test sub menu">
