@@ -5,42 +5,20 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import Menu from './Menu'
 import MenuItem from './Menu/MenuItem'
+import SubMenu from './Menu/subMenu'
 library.add(fas)
 const App = () => {
   return (
     <div>
-      <Menu defaultIndex={0} onSelect={(index) => alert(index)} mode="vertical">
-        <MenuItem index={0}>link1</MenuItem>
-        <MenuItem index={1} disabled>
-          link2
-        </MenuItem>
-        <MenuItem index={2}>link3</MenuItem>
+      <Menu mode='vertical' onSelect={(i) => console.log(i)} defaultOpenSubMenus={['2']}>
+        <MenuItem>link1</MenuItem>
+        <MenuItem disabled>link2</MenuItem>
+        <SubMenu title="test sub menu">
+          <MenuItem>dropdown 1</MenuItem>
+          <MenuItem>dropdown 2</MenuItem>
+        </SubMenu>
+        <MenuItem>link3</MenuItem>
       </Menu>
-      <Button btnType={ButtonType.Primary} size={ButtonSize.Large}>
-        test button
-      </Button>
-      <Button
-        btnType={ButtonType.Link}
-        href={'www.google.com'}
-        size={ButtonSize.Small}
-      >
-        test button
-      </Button>
-      <Button
-        btnType={ButtonType.Link}
-        disabled
-        href={'www.google.com'}
-        size={ButtonSize.Small}
-      >
-        test button
-      </Button>
-      <Button btnType={ButtonType.Link} disabled size={ButtonSize.Small}>
-        test button
-      </Button>
-      <Button btnType={ButtonType.Default} size={ButtonSize.Large}>
-        test button
-      </Button>
-      <Alert title={'alert'} type={'success'} description={'new test'} />
     </div>
   )
 }
