@@ -1,7 +1,7 @@
 import React from 'react'
 import { storiesOf } from "@storybook/react"
 import { action } from '@storybook/addon-actions'
-
+import { withInfo } from '@storybook/addon-info';
 import Button, {ButtonSize, ButtonType} from './button'
 
 const defaultButton = () => (
@@ -24,6 +24,12 @@ const typedButton = () => (
 )
 
 storiesOf('Button', module)
-    .add('Default Button', defaultButton)
+    .addDecorator(withInfo)
+    .addParameters({
+        info: {
+            inline: true
+        }
+    })
+    .add('Button', defaultButton)
     .add('Button with Different Sizes', sizedButton)
     .add('Button with different types', typedButton)
