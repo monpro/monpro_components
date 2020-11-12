@@ -1,5 +1,5 @@
 import React, {ReactElement, InputHTMLAttributes, FC, ChangeEvent} from 'react'
-import { IconProps } from "../Icon/icon";
+import Icon, { IconProps } from "../Icon/icon";
 import classNames from 'classnames';
 type InputSize = 'lg' | 'sm'
 
@@ -19,7 +19,6 @@ export const Input: FC<InputProps> = (props) => {
         icon,
         prepend,
         append,
-        onChange,
         style,
         ...restProps
     } = props
@@ -44,7 +43,14 @@ export const Input: FC<InputProps> = (props) => {
     }
     return (
         <div className={classes} style={style}>
-
+            {prepend && <div className={'mon-input-group-prepend'}>{prepend}</div>}
+            {icon && <div className='icon-wrapper'><Icon icon={icon} title={`title-${icon}`}/></div>}
+            <input
+                className='mon-input-inner'
+                disabled={disabled}
+                {...restProps}
+            />
+            {append && <div className='mon-input-group-append'>{append}</div>}
         </div>
     )
 }
