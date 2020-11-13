@@ -1,11 +1,10 @@
 import React from 'react'
-import Button, { ButtonSize, ButtonType } from './Button/button'
-import Alert from './Alert/alert'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import Menu from './Menu'
 import MenuItem from './Menu/MenuItem'
 import SubMenu from './Menu/subMenu'
+import Input from "./Input/input";
 library.add(fas)
 const App = () => {
   return (
@@ -19,6 +18,7 @@ const App = () => {
         </SubMenu>
         <MenuItem>link3</MenuItem>
       </Menu>
+      <Input prepend="coffee" append="latte"/>
     </div>
   )
 }
