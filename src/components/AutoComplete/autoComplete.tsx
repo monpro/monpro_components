@@ -2,13 +2,14 @@ import React, {
   ChangeEvent,
   FC,
   ReactElement,
-  useEffect,
+  useEffect, useRef,
   useState,
 } from 'react'
 import Input, { InputProps } from '../Input/input'
 import Icon from '../Icon/icon'
 import useDebounce from '../hooks/useDebounce'
 import classNames from 'classnames'
+import useClickOutside from "../hooks/useClickOutside";
 
 interface RenderItemObject {
   value: string
@@ -32,11 +33,13 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
   const [highlightIndex, setHighlightIndex] = useState(-1)
   const [isLoading, setIsLoading] = useState(false)
   const debounceValue = useDebounce(inputVal, 500)
-  console.log('get suggestions', suggestions)
+  const startSearch = useRef(false)
+  const autoCompleteRef = useRef<HTMLDivElement>(null)
+
+  useClickOutside(autoCompleteRef, () => setSuggestions([]))
   useEffect(() => {
-    console.log('triggered')
     async function handleSuggestions() {
-      if (debounceValue) {
+      if (debounceValue && startSearch.current) {
         const result = getSuggestions(debounceValue)
         if (result instanceof Promise) {
           setIsLoading(true)
@@ -63,6 +66,7 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
     if (onSelect) {
       onSelect(item)
     }
+    startSearch.current = false
   }
 
   const getDropDownList = (suggestions: RenderItemType[]) => {
@@ -84,6 +88,7 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim()
     setInputVal(value)
+    startSearch.current = true
   }
 
   const setHighLight = (index: number) => {
@@ -115,7 +120,7 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
 
 
   return (
-    <div className="mon-auto-complete">
+    <div className="mon-auto-complete" ref={autoCompleteRef}>
       <Input
         value={inputVal}
         onChange={handleChange}
