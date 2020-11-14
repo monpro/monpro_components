@@ -9,6 +9,11 @@ interface StateProps {
   order: number;
 }
 
+interface GitProps {
+  login: string;
+  url: string;
+}
+
 const defaultComplete = () => {
   const states = [
     {
@@ -248,19 +253,36 @@ const defaultComplete = () => {
       order: 58,
     },
   ]
+  // const getSuggestions = (inputVal: string) => {
+  //   return states.filter((state) => state.value.includes(inputVal))
+  // }
   const getSuggestions = (inputVal: string) => {
-    return states.filter((state) => state.value.includes(inputVal))
+    return fetch(`https://api.github.com/search/users?q=${inputVal}`)
+      .then(res => res.json())
+      .then(data => {
+        const {items} = data
+        return items.slice(0, 10).map((item: GitProps) => ({value: item.login, ...item}))
+      })
   }
 
   const stateRender = (item: RenderItemType<StateProps>) => {
     return <h5>state: {item.value} order: {item.order}</h5>
   }
 
+  const gitRender = (item: RenderItemType<GitProps>) => {
+    return (
+      <>
+      <h5>login: {item.login}</h5>
+        <p>url: {item.url}</p>
+      </>
+    )
+  }
+
   return (
     <AutoComplete
       getSuggestions={getSuggestions}
       onSelect={action('tested')}
-      renderOption={stateRender}
+      renderOption={gitRender}
     />
   )
 }

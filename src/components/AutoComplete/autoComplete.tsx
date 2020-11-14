@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FC, ReactElement, useState } from 'react'
 import Input, { InputProps } from '../Input/input'
+import Icon from "../Icon/icon";
 
 interface RenderItemObject {
   value: string
@@ -8,7 +9,7 @@ interface RenderItemObject {
 export type RenderItemType<T = {}> = T & RenderItemObject
 
 export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
-  getSuggestions: (input: string) => RenderItemType[]
+  getSuggestions: (input: string) => RenderItemType[] | Promise<RenderItemType[]>
   onSelect?: (item: RenderItemType) => void
   renderOption?: (item: RenderItemType) => ReactElement
 }
@@ -18,10 +19,12 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
 
   const [inputVal, setInputVal] = useState('')
   const [suggestions, setSuggestions] = useState<RenderItemType[]>([])
-  console.log(suggestions)
+  const [isLoading, setIsLoading] = useState(false)
+
   const getRenderChildren = (item: RenderItemType) => {
     return renderOption ? renderOption(item) : item.value
   }
+
   const getDropDownList = (suggestions: RenderItemType[]) => {
     const handleClick = (item: RenderItemType) => {
       setInputVal(item.value)
@@ -42,12 +45,19 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
       </ul>
     )
   }
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim()
     setInputVal(value)
     if (value) {
       const result = getSuggestions(value)
-      setSuggestions(result)
+      if (result instanceof Promise) {
+        setIsLoading(true)
+        const data = await result
+        setIsLoading(false)
+        setSuggestions(data)
+      } else {
+        setSuggestions(result)
+      }
     } else {
       setSuggestions([])
     }
@@ -57,6 +67,7 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
     <div className="mon-auto-complete">
       <Input value={inputVal} onChange={handleChange} {...restProps} />
       {suggestions.length > 0 && getDropDownList(suggestions)}
+      { isLoading && <ul><Icon icon="spinner" spin/></ul>}
     </div>
   )
 }
