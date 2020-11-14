@@ -24,10 +24,8 @@ interface BaseButtonProps {
   children: React.ReactNode
 }
 
-type NativeButtonTypes = BaseButtonProps &
-  ButtonHTMLAttributes<HTMLElement>
-type AnchorButtonTypes = BaseButtonProps &
-  AnchorHTMLAttributes<HTMLElement>
+type NativeButtonTypes = BaseButtonProps & ButtonHTMLAttributes<HTMLElement>
+type AnchorButtonTypes = BaseButtonProps & AnchorHTMLAttributes<HTMLElement>
 
 export type ButtonProps = Partial<NativeButtonTypes & AnchorButtonTypes>
 
