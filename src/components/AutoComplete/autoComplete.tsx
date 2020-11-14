@@ -8,6 +8,7 @@ import React, {
 import Input, { InputProps } from '../Input/input'
 import Icon from '../Icon/icon'
 import useDebounce from '../hooks/useDebounce'
+import classNames from 'classnames'
 
 interface RenderItemObject {
   value: string
@@ -28,9 +29,12 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
 
   const [inputVal, setInputVal] = useState(value as string)
   const [suggestions, setSuggestions] = useState<RenderItemType[]>([])
+  const [highlightIndex, setHighlightIndex] = useState(-1)
   const [isLoading, setIsLoading] = useState(false)
   const debounceValue = useDebounce(inputVal, 500)
+  console.log('get suggestions', suggestions)
   useEffect(() => {
+    console.log('triggered')
     async function handleSuggestions() {
       if (debounceValue) {
         const result = getSuggestions(debounceValue)
@@ -45,6 +49,7 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
       } else {
         setSuggestions([])
       }
+      setHighlightIndex(-1)
     }
     handleSuggestions()
   }, [debounceValue])
@@ -52,19 +57,23 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
     return renderOption ? renderOption(item) : item.value
   }
 
-  const getDropDownList = (suggestions: RenderItemType[]) => {
-    const handleClick = (item: RenderItemType) => {
-      setInputVal(item.value)
-      setSuggestions([])
-      if (onSelect) {
-        onSelect(item)
-      }
+  const handleSelect = (item: RenderItemType) => {
+    setInputVal(item.value)
+    setSuggestions([])
+    if (onSelect) {
+      onSelect(item)
     }
+  }
+
+  const getDropDownList = (suggestions: RenderItemType[]) => {
     return (
       <ul>
         {suggestions.map((item, index) => {
+          const classes = classNames('suggestion-item', {
+            'highlight-item': index === highlightIndex
+          })
           return (
-            <li key={index} onClick={() => handleClick(item)}>
+            <li className={classes} key={index} onClick={() => handleSelect(item)}>
               {getRenderChildren(item)}
             </li>
           )
@@ -72,14 +81,46 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
       </ul>
     )
   }
-  const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim()
     setInputVal(value)
   }
 
+  const setHighLight = (index: number) => {
+    index = Math.max(0, index)
+    index = Math.min(suggestions.length - 1, index)
+    setHighlightIndex(index)
+  }
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    switch (e.keyCode) {
+      case 13: // enter
+        if (suggestions[highlightIndex]) {
+          handleSelect(suggestions[highlightIndex])
+        }
+        break
+      case 38: // up
+        setHighLight(highlightIndex - 1)
+        break
+      case 40: // down
+        setHighLight(highlightIndex + 1)
+        break
+      case 27: // esc
+        setSuggestions([])
+        break
+      default:
+        break
+    }
+  }
+
+
+
   return (
     <div className="mon-auto-complete">
-      <Input value={inputVal} onChange={handleChange} {...restProps} />
+      <Input
+        value={inputVal}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        {...restProps} />
       {suggestions.length > 0 && getDropDownList(suggestions)}
       {isLoading && (
         <ul>
