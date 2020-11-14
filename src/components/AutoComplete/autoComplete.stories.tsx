@@ -1,17 +1,17 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import {AutoComplete, RenderItemType} from './autoComplete'
+import { AutoComplete, RenderItemType } from './autoComplete'
 import { withInfo } from '@storybook/addon-info'
 
 interface StateProps {
-  value: string;
-  order: number;
+  value: string
+  order: number
 }
 
 interface GitProps {
-  login: string;
-  url: string;
+  login: string
+  url: string
 }
 
 const defaultComplete = () => {
@@ -258,21 +258,27 @@ const defaultComplete = () => {
   // }
   const getSuggestions = (inputVal: string) => {
     return fetch(`https://api.github.com/search/users?q=${inputVal}`)
-      .then(res => res.json())
-      .then(data => {
-        const {items} = data
-        return items.slice(0, 10).map((item: GitProps) => ({value: item.login, ...item}))
+      .then((res) => res.json())
+      .then((data) => {
+        const { items } = data
+        return items
+          .slice(0, 10)
+          .map((item: GitProps) => ({ value: item.login, ...item }))
       })
   }
 
   const stateRender = (item: RenderItemType<StateProps>) => {
-    return <h5>state: {item.value} order: {item.order}</h5>
+    return (
+      <h5>
+        state: {item.value} order: {item.order}
+      </h5>
+    )
   }
 
   const gitRender = (item: RenderItemType<GitProps>) => {
     return (
       <>
-      <h5>login: {item.login}</h5>
+        <h5>login: {item.login}</h5>
         <p>url: {item.url}</p>
       </>
     )
