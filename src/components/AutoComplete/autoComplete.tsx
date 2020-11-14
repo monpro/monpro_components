@@ -1,21 +1,30 @@
-import React, { ChangeEvent, FC, useState } from 'react'
+import React, { ChangeEvent, FC, ReactElement, useState } from 'react'
 import Input, { InputProps } from '../Input/input'
 
+interface RenderItemObject {
+  value: string
+}
+
+export type RenderItemType<T = {}> = T & RenderItemObject
+
 export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
-  getSuggestions: (input: string) => string[]
-  onSelect?: (item: string) => void
+  getSuggestions: (input: string) => RenderItemType[]
+  onSelect?: (item: RenderItemType) => void
+  renderOption?: (item: RenderItemType) => ReactElement
 }
 
 export const AutoComplete: FC<AutoCompleteProps> = (props) => {
-  const { getSuggestions, onSelect, ...restProps } = props
+  const { getSuggestions, onSelect, renderOption, ...restProps } = props
 
   const [inputVal, setInputVal] = useState('')
-  const [suggestions, setSuggestions] = useState<string[]>([])
+  const [suggestions, setSuggestions] = useState<RenderItemType[]>([])
   console.log(suggestions)
-
-  const getDropDownList = (suggestions: string[]) => {
-    const handleClick = (item: string) => {
-      setInputVal(item)
+  const getRenderChildren = (item: RenderItemType) => {
+    return renderOption ? renderOption(item) : item.value
+  }
+  const getDropDownList = (suggestions: RenderItemType[]) => {
+    const handleClick = (item: RenderItemType) => {
+      setInputVal(item.value)
       setSuggestions([])
       if (onSelect) {
         onSelect(item)
@@ -26,7 +35,7 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
         {suggestions.map((item, index) => {
           return (
             <li key={index} onClick={() => handleClick(item)}>
-              {item}
+              {getRenderChildren(item)}
             </li>
           )
         })}
