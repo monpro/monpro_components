@@ -71,7 +71,7 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
 
   const getDropDownList = (suggestions: RenderItemType[]) => {
     return (
-      <ul>
+      <ul className='mon-suggestion-list'>
         {suggestions.map((item, index) => {
           const classes = classNames('suggestion-item', {
             'highlight-item': index === highlightIndex
