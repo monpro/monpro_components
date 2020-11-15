@@ -12,15 +12,14 @@ module.exports = {
                 return !prop.parent.fileName.includes('node_modules')
               }
               return true
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     },
     '@storybook/addon-actions',
     '@storybook/addon-links',
     '@storybook/addon-info',
-    '@storybook/preset-scss'
+    '@storybook/preset-scss',
   ],
-};
-
+}

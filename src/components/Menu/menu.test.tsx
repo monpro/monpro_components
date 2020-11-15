@@ -17,7 +17,7 @@ const testProps: MenuProps = {
 const testVerticalProps: MenuProps = {
   defaultIndex: '0',
   mode: 'vertical',
-  defaultOpenSubMenus: ['3']
+  defaultOpenSubMenus: ['3'],
 }
 
 const getMenu = (props: MenuProps) => {
@@ -26,10 +26,8 @@ const getMenu = (props: MenuProps) => {
       <MenuItem>active item 1</MenuItem>
       <MenuItem disabled>disabled item 2</MenuItem>
       <MenuItem>test item 3</MenuItem>
-      <SubMenu title='test submenu'>
-        <MenuItem>
-          item 4
-        </MenuItem>
+      <SubMenu title="test submenu">
+        <MenuItem>item 4</MenuItem>
       </SubMenu>
     </Menu>
   )

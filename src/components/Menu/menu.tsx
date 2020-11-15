@@ -23,7 +23,15 @@ interface IMenuContext {
 export const MenuContext = createContext<IMenuContext>({ index: '0' })
 
 const Menu: React.FC<MenuProps> = (props) => {
-  const { className, mode, style, children, defaultIndex, onSelect, defaultOpenSubMenus } = props
+  const {
+    className,
+    mode,
+    style,
+    children,
+    defaultIndex,
+    onSelect,
+    defaultOpenSubMenus,
+  } = props
   const [activeIndex, setActiveIndex] = useState(defaultIndex)
   const classes = classNames('mon-menu', className, {
     'mon-menu-vertical': mode === 'vertical',
@@ -41,7 +49,7 @@ const Menu: React.FC<MenuProps> = (props) => {
     index: activeIndex ? activeIndex : '0',
     onSelect: handleClick,
     mode,
-      defaultOpenSubMenus
+    defaultOpenSubMenus,
   }
 
   const renderChildren = () => {
