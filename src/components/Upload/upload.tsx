@@ -1,15 +1,18 @@
 import React, { ChangeEvent, FC, useRef } from 'react'
 import axios from 'axios'
 import Button from '../Button/button'
+import {Promise} from "q";
 
 export interface UploadProps {
   action: string
+  beforeUpload?: (file: File) => Promise<File> | boolean
   onProgress?: (percentage: number, file: File) => void
   onSuccess?: (data: any, file: File) => void
   onError?: (err: any, file: File) => void
+  onChange?: (file: File) => void;
 }
 export const Upload: FC<UploadProps> = (props) => {
-  const { action, onProgress, onSuccess, onError } = props
+  const { action, beforeUpload, onProgress, onSuccess, onError, onChange } = props
 
   const inputRef = useRef<HTMLInputElement>(null)
   const handleClick = () => {
@@ -18,32 +21,52 @@ export const Upload: FC<UploadProps> = (props) => {
     }
   }
 
+  const uploadFile = (file: File) => {
+    const formData = new FormData()
+    formData.append(file.name, file)
+    axios
+      .post(action, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        onUploadProgress: (e) => {
+          const percentage = Math.round((e.loaded * 100) / e.total) || 0
+          if (percentage < 100) {
+            onProgress(percentage, file)
+          }
+        },
+      })
+      .then((res) => {
+        if (onSuccess) {
+          onSuccess(res.data, file)
+        }
+        if (onChange) {
+          onChange(file)
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+        onError(err, file)
+        if (onChange) {
+          onChange(file)
+        }
+      })
+  }
+
   const handleUploadFiles = (files: FileList) => {
     const filesList = Array.from(files)
     filesList.forEach((file) => {
-      const formData = new FormData()
-      formData.append(file.name, file)
-      axios
-        .post(action, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          onUploadProgress: (e) => {
-            const percentage = Math.round((e.loaded * 100) / e.total) || 0
-            if (percentage < 100) {
-              onProgress(percentage, file)
-            }
-          },
+      if (!beforeUpload) {
+        uploadFile(file)
+      }
+      const parsedFile = beforeUpload(file)
+      if (parsedFile && parsedFile instanceof Promise) {
+        parsedFile.then((result: File) => {
+          uploadFile(result)
         })
-        .then((res) => {
-          if (onSuccess) {
-            onSuccess(res.data, file)
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-          onError(err, file)
-        })
+      } else if (parsedFile !== false) {
+        uploadFile(file)
+      }
     })
   }
 
