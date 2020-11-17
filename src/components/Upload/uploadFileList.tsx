@@ -20,11 +20,17 @@ export const UploadFileList: FC<UploadFileListProps> = (props) => {
               {file.name}
             </span>
             <span className="file-status">
-              {file.status ===  'uploading' && <Icon icon='spinner' spin theme="primary"/>}
-              {file.status ===  'success' && <Icon icon='check-circle' spin theme="success"/>}
-              {file.status ===  'error' && <Icon icon='times-circle' spin theme="danger"/>}
+              {file.status === 'uploading' && (
+                <Icon icon="spinner" spin theme="primary" />
+              )}
+              {file.status === 'success' && (
+                <Icon icon="check-circle" spin theme="success" />
+              )}
+              {file.status === 'error' && (
+                <Icon icon="times-circle" spin theme="danger" />
+              )}
             </span>
-            <span className='file-action'>
+            <span className="file-action">
               <Icon icon="times" onClick={() => onRemove(file)} />
             </span>
           </li>

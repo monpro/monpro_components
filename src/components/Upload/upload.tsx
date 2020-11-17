@@ -112,8 +112,8 @@ export const Upload: FC<UploadProps> = (props) => {
       })
   }
   const handleRemove = (file: UploadFile) => {
-    setFileList(prev => {
-      return prev.filter(item => item.uuid !== file.uuid)
+    setFileList((prev) => {
+      return prev.filter((item) => item.uuid !== file.uuid)
     })
     if (onRemove) {
       onRemove(file)
