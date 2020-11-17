@@ -2,14 +2,15 @@ import React, {
   ChangeEvent,
   FC,
   ReactElement,
-  useEffect, useRef,
+  useEffect,
+  useRef,
   useState,
 } from 'react'
 import Input, { InputProps } from '../Input/input'
 import Icon from '../Icon/icon'
 import useDebounce from '../hooks/useDebounce'
 import classNames from 'classnames'
-import useClickOutside from "../hooks/useClickOutside";
+import useClickOutside from '../hooks/useClickOutside'
 
 interface RenderItemObject {
   value: string
@@ -71,13 +72,17 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
 
   const getDropDownList = (suggestions: RenderItemType[]) => {
     return (
-      <ul className='mon-suggestion-list'>
+      <ul className="mon-suggestion-list">
         {suggestions.map((item, index) => {
           const classes = classNames('suggestion-item', {
-            'highlight-item': index === highlightIndex
+            'highlight-item': index === highlightIndex,
           })
           return (
-            <li className={classes} key={index} onClick={() => handleSelect(item)}>
+            <li
+              className={classes}
+              key={index}
+              onClick={() => handleSelect(item)}
+            >
               {getRenderChildren(item)}
             </li>
           )
@@ -117,15 +122,14 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
     }
   }
 
-
-
   return (
     <div className="mon-auto-complete" ref={autoCompleteRef}>
       <Input
         value={inputVal}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        {...restProps} />
+        {...restProps}
+      />
       {suggestions.length > 0 && getDropDownList(suggestions)}
       {isLoading && (
         <ul>
