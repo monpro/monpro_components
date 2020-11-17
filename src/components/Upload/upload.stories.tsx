@@ -2,7 +2,19 @@ import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { withInfo } from '@storybook/addon-info'
-import Upload from './upload'
+import Upload, { UploadFile } from './upload'
+
+const testFileList: UploadFile[] = [
+  {
+    uuid: '12a',
+    size: 1000,
+    name: 'test.csv',
+    status: 'uploading',
+    percent: 40,
+  },
+  { uuid: '13a', size: 2000, name: 'ms.docx', status: 'success', percent: 100 },
+  { uuid: '14a', size: 3000, name: 'novel.text', status: 'error', percent: 60 },
+]
 
 const checkFileSize = (file: File) => {
   if (Math.round(file.size / 1024) > 100) {
@@ -24,6 +36,8 @@ const DefaultUpload = () => {
       onSuccess={action('success')}
       onError={action('error')}
       onChange={action('changed')}
+      onRemove={action('removed')}
+      defaultUploadedFileList={testFileList}
       beforeUpload={filePromise}
     />
   )
