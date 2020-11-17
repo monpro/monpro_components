@@ -1,11 +1,10 @@
 import React, { ChangeEvent, FC, useRef } from 'react'
 import axios from 'axios'
 import Button from '../Button/button'
-import {Promise} from "q";
 
 export interface UploadProps {
   action: string
-  beforeUpload?: (file: File) => Promise<File> | boolean
+  beforeUpload?: (file: File) => boolean | Promise<File>
   onProgress?: (percentage: number, file: File) => void
   onSuccess?: (data: any, file: File) => void
   onError?: (err: any, file: File) => void
@@ -55,17 +54,18 @@ export const Upload: FC<UploadProps> = (props) => {
 
   const handleUploadFiles = (files: FileList) => {
     const filesList = Array.from(files)
-    filesList.forEach((file) => {
+    filesList.forEach(file => {
       if (!beforeUpload) {
         uploadFile(file)
-      }
-      const parsedFile = beforeUpload(file)
-      if (parsedFile && parsedFile instanceof Promise) {
-        parsedFile.then((result: File) => {
-          uploadFile(result)
-        })
-      } else if (parsedFile !== false) {
-        uploadFile(file)
+      } else {
+        const parsedFile = beforeUpload(file)
+        if (parsedFile && parsedFile instanceof Promise) {
+          parsedFile.then(result => {
+            uploadFile(result)
+          })
+        } else if (parsedFile !== false) {
+          uploadFile(file)
+        }
       }
     })
   }
