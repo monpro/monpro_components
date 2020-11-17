@@ -1,6 +1,19 @@
-import React, { ChangeEvent, FC, useRef } from 'react'
-import axios from 'axios'
+import React, { ChangeEvent, FC, useRef, useState } from 'react'
+import axios, { AxiosError, AxiosResponse } from 'axios'
 import Button from '../Button/button'
+
+export type UploadFileStatus = 'ready' | 'uploading' | 'success' | 'error'
+
+export interface UploadFile {
+  uuid: string
+  size: number
+  name: string
+  status?: UploadFileStatus
+  percent?: number
+  original?: File
+  response?: AxiosResponse
+  error?: AxiosError
+}
 
 export interface UploadProps {
   action: string
@@ -8,12 +21,36 @@ export interface UploadProps {
   onProgress?: (percentage: number, file: File) => void
   onSuccess?: (data: any, file: File) => void
   onError?: (err: any, file: File) => void
-  onChange?: (file: File) => void;
+  onChange?: (file: File) => void
 }
 export const Upload: FC<UploadProps> = (props) => {
-  const { action, beforeUpload, onProgress, onSuccess, onError, onChange } = props
+  const {
+    action,
+    beforeUpload,
+    onProgress,
+    onSuccess,
+    onError,
+    onChange,
+  } = props
 
   const inputRef = useRef<HTMLInputElement>(null)
+  const [fileList, setFileList] = useState<UploadFile[]>([])
+
+  const updateFileList = (
+    updateFile: UploadFile,
+    updateProps: Partial<UploadFile>
+  ) => {
+    setFileList((prev) => {
+      return prev.map((file) => {
+        if (file.uuid === updateFile.uuid) {
+          return { ...file, ...updateProps }
+        } else {
+          return file
+        }
+      })
+    })
+  }
+
   const handleClick = () => {
     if (inputRef.current) {
       inputRef.current.click()
@@ -21,6 +58,15 @@ export const Upload: FC<UploadProps> = (props) => {
   }
 
   const uploadFile = (file: File) => {
+    const newFile: UploadFile = {
+      uuid: Date.now() + 'upload',
+      status: 'ready',
+      name: file.name,
+      size: file.size,
+      percent: 0,
+      original: file,
+    }
+    setFileList([newFile, ...fileList])
     const formData = new FormData()
     formData.append(file.name, file)
     axios
@@ -31,11 +77,17 @@ export const Upload: FC<UploadProps> = (props) => {
         onUploadProgress: (e) => {
           const percentage = Math.round((e.loaded * 100) / e.total) || 0
           if (percentage < 100) {
+            updateFileList(newFile, {
+              percent: percentage,
+              status: 'uploading',
+            })
             onProgress(percentage, file)
           }
         },
       })
       .then((res) => {
+        updateFileList(newFile, { response: res, status: 'success' })
+
         if (onSuccess) {
           onSuccess(res.data, file)
         }
@@ -44,6 +96,7 @@ export const Upload: FC<UploadProps> = (props) => {
         }
       })
       .catch((err) => {
+        updateFileList(newFile, { error: err, status: 'error' })
         console.log(err)
         onError(err, file)
         if (onChange) {
@@ -54,13 +107,13 @@ export const Upload: FC<UploadProps> = (props) => {
 
   const handleUploadFiles = (files: FileList) => {
     const filesList = Array.from(files)
-    filesList.forEach(file => {
+    filesList.forEach((file) => {
       if (!beforeUpload) {
         uploadFile(file)
       } else {
         const parsedFile = beforeUpload(file)
         if (parsedFile && parsedFile instanceof Promise) {
-          parsedFile.then(result => {
+          parsedFile.then((result) => {
             uploadFile(result)
           })
         } else if (parsedFile !== false) {
@@ -80,6 +133,8 @@ export const Upload: FC<UploadProps> = (props) => {
       inputRef.current.value = ''
     }
   }
+
+  console.log(fileList)
   return (
     <div className="mon-upload-component">
       <Button btnType="primary" onClick={handleClick}>

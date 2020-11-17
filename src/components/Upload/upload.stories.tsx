@@ -13,7 +13,7 @@ const checkFileSize = (file: File) => {
 }
 
 const filePromise = (file: File) => {
-  const newFile = new File([file], 'test_rename.scss', {type: file.type})
+  const newFile = new File([file], 'test_rename.scss', { type: file.type })
   return Promise.resolve(newFile)
 }
 const DefaultUpload = () => {
