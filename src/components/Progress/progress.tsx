@@ -9,21 +9,18 @@ export interface ProgressProps {
 }
 
 const Progress: FC<ProgressProps> = (props) => {
-  const {
-    percent,
-    height,
-    displayText,
-    styles,
-    theme
-  } = props
-  return(
+  const { percent, height, displayText, styles, theme } = props
+  return (
     <div className="mon-progress-bar" style={styles}>
-      <div className="mon-progress-bar-layout" style={{height: `${height}px`}}>
+      <div
+        className="mon-progress-bar-layout"
+        style={{ height: `${height}px` }}
+      >
         <div
           className={`mon-progress-bar-container color-${theme}`}
-          style={{width: `${percent}%`}}
+          style={{ width: `${percent}%` }}
         >
-          {displayText && <span className='percent-text'>{`${percent}%`}</span>}
+          {displayText && <span className="percent-text">{`${percent}%`}</span>}
         </div>
       </div>
     </div>
@@ -33,7 +30,7 @@ const Progress: FC<ProgressProps> = (props) => {
 Progress.defaultProps = {
   height: 20,
   displayText: true,
-  theme: "success"
+  theme: 'success',
 }
 
 export default Progress

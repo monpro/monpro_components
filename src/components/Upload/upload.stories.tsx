@@ -38,7 +38,12 @@ const DefaultUpload = () => {
       onChange={action('changed')}
       onRemove={action('removed')}
       defaultUploadedFileList={testFileList}
-      beforeUpload={filePromise}
+      // beforeUpload={filePromise}
+      name="file_test_Name"
+      data={{"threshold": 13}}
+      headers={{'X-Powered-By': 'mon'}}
+      accept=".css"
+      multiple
     />
   )
 }
