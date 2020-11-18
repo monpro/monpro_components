@@ -3,6 +3,7 @@ import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { withInfo } from '@storybook/addon-info'
 import Upload, { UploadFile } from './upload'
+import Icon from "../Icon/icon";
 
 const testFileList: UploadFile[] = [
   {
@@ -40,11 +41,16 @@ const DefaultUpload = () => {
       defaultUploadedFileList={testFileList}
       // beforeUpload={filePromise}
       name="file_test_Name"
-      data={{"threshold": 13}}
-      headers={{'X-Powered-By': 'mon'}}
+      data={{ threshold: 13 }}
+      headers={{ 'X-Powered-By': 'mon' }}
       accept=".css"
       multiple
-    />
+      drag={true}
+    >
+      <Icon icon="upload" size="5x" theme="secondary" />
+      <br/>
+      <p>Drag file over to upload</p>
+    </Upload>
   )
 }
 

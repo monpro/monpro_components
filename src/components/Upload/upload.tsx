@@ -2,6 +2,7 @@ import React, { ChangeEvent, FC, useRef, useState } from 'react'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import Button from '../Button/button'
 import UploadFileList from './uploadFileList'
+import {DragArea} from "./dragArea";
 
 export type UploadFileStatus = 'ready' | 'uploading' | 'success' | 'error'
 
@@ -31,6 +32,7 @@ export interface UploadProps {
   withCredentials?: boolean
   accept?: string
   multiple?: boolean
+  drag?: boolean
 }
 export const Upload: FC<UploadProps> = (props) => {
   const {
@@ -47,7 +49,9 @@ export const Upload: FC<UploadProps> = (props) => {
     data,
     withCredentials,
     accept,
-    multiple
+    multiple,
+    children,
+    drag,
   } = props
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -86,7 +90,7 @@ export const Upload: FC<UploadProps> = (props) => {
       original: file,
     }
     // setFileList([newFile, ...fileList])
-    setFileList(prev => {
+    setFileList((prev) => {
       return [newFile, ...prev]
     })
     const formData = new FormData()
@@ -173,18 +177,21 @@ export const Upload: FC<UploadProps> = (props) => {
   console.log(fileList)
   return (
     <div className="mon-upload-component">
-      <Button btnType="primary" onClick={handleClick}>
-        Upload File
-      </Button>
-      <input
-        className="mon-file-input"
-        style={{ display: 'none' }}
-        onChange={handleInputChange}
-        type="file"
-        ref={inputRef}
-        accept={accept}
-        multiple
-      />
+      <div className="mon-upload-input" onClick={handleClick}>
+        {drag ? <DragArea onDragFiles={(files) => handleUploadFiles(files)}>{children}</DragArea> : children}
+        {/*<Button btnType="primary" onClick={handleClick}>*/}
+        {/*Upload File*/}
+        {/*</Button>*/}
+        <input
+          className="mon-file-input"
+          style={{ display: 'none' }}
+          onChange={handleInputChange}
+          type="file"
+          ref={inputRef}
+          accept={accept}
+          multiple={multiple}
+        />
+      </div>
       <UploadFileList fileList={fileList} onRemove={handleRemove} />
     </div>
   )
