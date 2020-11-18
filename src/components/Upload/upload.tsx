@@ -2,7 +2,7 @@ import React, { ChangeEvent, FC, useRef, useState } from 'react'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import Button from '../Button/button'
 import UploadFileList from './uploadFileList'
-import {DragArea} from "./dragArea";
+import { DragArea } from './dragArea'
 
 export type UploadFileStatus = 'ready' | 'uploading' | 'success' | 'error'
 
@@ -96,10 +96,10 @@ export const Upload: FC<UploadProps> = (props) => {
     const formData = new FormData()
     formData.append(name || 'default_file', file)
     if (data) {
+      Object.keys(data).forEach((key) => {
+        formData.append(key, data[key])
+      })
     }
-    Object.keys(data).forEach((key) => {
-      formData.append(key, data[key])
-    })
     axios
       .post(action, formData, {
         headers: {
@@ -178,7 +178,13 @@ export const Upload: FC<UploadProps> = (props) => {
   return (
     <div className="mon-upload-component">
       <div className="mon-upload-input" onClick={handleClick}>
-        {drag ? <DragArea onDragFiles={(files) => handleUploadFiles(files)}>{children}</DragArea> : children}
+        {drag ? (
+          <DragArea onDragFiles={(files) => handleUploadFiles(files)}>
+            {children}
+          </DragArea>
+        ) : (
+          children
+        )}
         {/*<Button btnType="primary" onClick={handleClick}>*/}
         {/*Upload File*/}
         {/*</Button>*/}

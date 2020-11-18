@@ -14,6 +14,7 @@ export const UploadFileList: FC<UploadFileListProps> = (props) => {
   return (
     <ul className="mon-upload-list">
       {fileList.map((file) => {
+        console.log(file.status)
         return (
           <li className="mon-upload-list-item" key={file.uuid}>
             <span className={`file-name file-name-${file.status}`}>
@@ -21,7 +22,7 @@ export const UploadFileList: FC<UploadFileListProps> = (props) => {
               {file.name}
             </span>
             <span className="file-status">
-              {file.status === 'uploading' && (
+              {(file.status === 'uploading' || file.status === 'ready') && (
                 <Icon icon="spinner" spin theme="primary" />
               )}
               {file.status === 'success' && (
