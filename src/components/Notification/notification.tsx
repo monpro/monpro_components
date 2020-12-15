@@ -21,6 +21,7 @@ export interface NotificationProps {
   onClick?: () => void;
   top?: number;
   bottom?: number;
+  closeIcon?: React.ReactNode;
 }
 
 export interface ConfigProps {
@@ -104,6 +105,73 @@ const setNotificationConfig = (configs: ConfigProps) => {
   }
   if(closeIcon) {
     defaultCloseIcon = closeIcon;
+  }
+}
+
+const getLocationStyle = (
+  location: NotificationLocation,
+  top: number = defaultTop,
+  bottom: number = defaultBottom
+) => {
+  let style = {};
+  switch (location) {
+    case 'topLeft':
+      style = {
+        left: 0,
+        top,
+        bottom: 'auto'
+      }
+      break;
+    case 'topRight':
+      style = {
+        right: 0,
+        top,
+        bottom: 'auto'
+      }
+      break;
+    case 'bottomLeft':
+      style = {
+        left: 0,
+        top: 'auto',
+        bottom
+      }
+      break;
+    case 'bottomRight':
+      style = {
+        right: 0,
+        top: 'auto',
+        bottom
+      }
+      break;
+  }
+}
+
+export interface NotificationInfo {
+  prefixClasses: string;
+  instance: RCNotificationInstance;
+}
+
+const getNotificationInstance =  (props: NotificationProps, callback: (args: NotificationInfo) => void ) => {
+  const {
+    location,
+    top,
+    bottom,
+    closeIcon,
+    prefixClasses,
+  } = props;
+
+  const notificationClass = `${prefixClasses || defaultPrefixClasses}-container`;
+  const cacheKey = `${notificationClass}-${location}`;
+  const cacheInstance = notificationInstance[cacheKey];
+
+  if(cacheInstance) {
+    Promise.resolve(cacheInstance).then(instance => {
+      callback({
+        prefixClasses,
+        instance
+      });
+    })
+    return;
   }
 }
 
