@@ -56,12 +56,6 @@ export interface NotificationApi {
   useNotification: () => [NotificationInstance, React.ReactElement]
 }
 
-const api: any = {
-  open: () => {},
-  close: (key: string) => {},
-  config: () => {},
-  destroy: () => {}
-}
 
 // promise key-value pairs
 const notificationInstance: {
@@ -213,10 +207,10 @@ const getNotificationInstance =  (props: NotificationProps, callback: (args: Not
 
 
 
-const notice = (props: NotificationProps) => {
+const openApi = (props: NotificationProps) => {
       getNotificationInstance(props, ({prefixClasses, instance}) => {
-        instance.notice(null)
-      })
+        instance.notice(getNoticeProps(props, prefixClasses));
+      });
 }
 
 const getNoticeProps = (props: NotificationProps, prefixClasses: string) => {
@@ -227,13 +221,9 @@ const getNoticeProps = (props: NotificationProps, prefixClasses: string) => {
         key,
         onClose,
         duration,
-        location,
         style,
         className,
         onClick,
-        top,
-        bottom,
-        closeIcon,
         icon,
         type
       } = props;
@@ -246,6 +236,36 @@ const getNoticeProps = (props: NotificationProps, prefixClasses: string) => {
       } else if(type) {
         noticeIcon = <span className={`${prefixClasses}-icon ${prefixClasses}-icon-${type}`}>{typeToIcon[type] || null}</span>
       }
+
+      return {
+        content: (
+          <div className={noticeIcon ? `${prefixClasses}-with-icon`: ''} role='alert'>
+            {noticeIcon}
+            <div className={`${prefixClasses}-message`}>
+              {message}
+            </div>
+            <div className={`${prefixClasses}-description`}>
+              {description}
+            </div>
+            {btn ? <span className={`${prefixClasses}-btn`}>{btn}</span> : null}
+          </div>
+        ),
+        className: className,
+        onClose: onClose,
+        onClick: onClick,
+        key: key,
+        style: style || {},
+        closable: true,
+        duration: noticeDuration
+      }
+}
+
+
+const api: any = {
+  open: openApi,
+  close: (key: string) => {},
+  config: () => {},
+  destroy: () => {}
 }
 
 export default api as NotificationApi
