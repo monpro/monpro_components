@@ -1,7 +1,8 @@
 import React from 'react';
 import Notification from 'rc-notification';
 import { NotificationInstance as RCNotificationInstance } from 'rc-notification/lib/Notification';
-import {func} from "prop-types";
+import classNames from 'classnames'
+import Icon from "../Icon/icon";
 
 export type NotificationLocation = 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
 
@@ -144,6 +145,7 @@ const getLocationStyle = (
       }
       break;
   }
+  return style;
 }
 
 export interface NotificationInfo {
@@ -160,8 +162,9 @@ const getNotificationInstance =  (props: NotificationProps, callback: (args: Not
     prefixClasses,
   } = props;
 
-  const notificationClass = `${prefixClasses || defaultPrefixClasses}-container`;
-  const cacheKey = `${notificationClass}-${location}`;
+  const containerClass = `${prefixClasses || defaultPrefixClasses}-container`;
+  const cacheKey = `${containerClass}-${location}`;
+  // single instance design pattern
   const cacheInstance = notificationInstance[cacheKey];
 
   if(cacheInstance) {
@@ -173,6 +176,36 @@ const getNotificationInstance =  (props: NotificationProps, callback: (args: Not
     })
     return;
   }
+
+  const closeIconToBeRendered = (
+    <span className={`${containerClass}-close-x`}>
+      {closeIcon || <Icon icon="times" className={`${containerClass}-close-icon`}/>}
+    </span>
+  )
+
+  const notificationClass = classNames(`${containerClass}-${location}`, {
+    [`${containerClass}-rtl`]: defaultRtl === true,
+  });
+
+  // we need create a new single instance with key - cachedKey
+  notificationInstance[cacheKey] = new Promise(resolve => {
+    Notification.newInstance(
+      {
+        prefixCls: containerClass,
+        className: notificationClass,
+        style: getLocationStyle(location, top, bottom),
+        getContainer: () => null,
+        closeIcon: closeIconToBeRendered,
+      },
+      notification => {
+        resolve(notification)
+        callback({
+          prefixClasses,
+          instance: notification
+        })
+      }
+    )
+  })
 }
 
 export default api as NotificationApi
