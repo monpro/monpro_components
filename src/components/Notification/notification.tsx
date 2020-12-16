@@ -3,6 +3,7 @@ import Notification from 'rc-notification';
 import { NotificationInstance as RCNotificationInstance } from 'rc-notification/lib/Notification';
 import classNames from 'classnames'
 import Icon from "../Icon/icon";
+import {typeToIcon} from "./const";
 
 export type NotificationLocation = 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
 
@@ -22,7 +23,9 @@ export interface NotificationProps {
   onClick?: () => void;
   top?: number;
   bottom?: number;
+  icon?: React.ReactNode;
   closeIcon?: React.ReactNode;
+  readonly type?: IconType;
 }
 
 export interface ConfigProps {
@@ -206,6 +209,43 @@ const getNotificationInstance =  (props: NotificationProps, callback: (args: Not
       }
     )
   })
+}
+
+
+
+const notice = (props: NotificationProps) => {
+      getNotificationInstance(props, ({prefixClasses, instance}) => {
+        instance.notice(null)
+      })
+}
+
+const getNoticeProps = (props: NotificationProps, prefixClasses: string) => {
+      const {
+        message,
+        description,
+        btn,
+        key,
+        onClose,
+        duration,
+        location,
+        style,
+        className,
+        onClick,
+        top,
+        bottom,
+        closeIcon,
+        icon,
+        type
+      } = props;
+
+      const noticeDuration =  duration ? duration : defaultDuration;
+      let noticeIcon: React.ReactNode = null;
+
+      if(icon) {
+        noticeIcon = <span className={`${prefixClasses}-icon`}>{icon}</span>
+      } else if(type) {
+        noticeIcon = <span className={`${prefixClasses}-icon ${prefixClasses}-icon-${type}`}>{typeToIcon[type] || null}</span>
+      }
 }
 
 export default api as NotificationApi
