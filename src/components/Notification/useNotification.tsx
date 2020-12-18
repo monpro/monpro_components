@@ -11,16 +11,12 @@ import {
   NotificationProps
 } from "./notification";
 
-
-interface GetNotificationInstanceInterface {
-  args: NotificationProps,
-  callback: (info: {prefixClasses: string, instance: RCNotificationInstance}) => void
-}
+type NotificationCallBack = (info: {prefixClasses: string, instance: RCNotificationInstance}) => void
 
 type GetRCNoticePropsType = (args: NotificationProps, prefixClasses: string) => RCNoticeContent
 
 const createUseNotification = (
-  getNotificationInstance: (props: GetNotificationInstanceInterface) => void,
+  getNotificationInstance: (props: NotificationProps, callback: NotificationCallBack) => void,
   getRCNoticeProps: GetRCNoticePropsType
 ) => {
   const useNotification = (): [NotificationInstance, React.ReactElement] => {
@@ -35,10 +31,39 @@ const createUseNotification = (
 
     const [hookNotify, holder] = useRCNotification(proxy);
 
+    const notify = (props: NotificationProps) => {
+      const { prefixClasses: customizePrefixCls } = props;
+
+      getNotificationInstance(
+        {
+          ...props,
+          prefixClasses: customizePrefixCls
+        },
+        ({
+          prefixClasses, instance
+        }) => {
+          innerInstance = instance
+          hookNotify(getRCNoticeProps(props, prefixClasses))
+        }
+      )
+    }
+
+    const hookApiRef = React.useRef<any>({});
+
+    hookApiRef.current.open = notify;
+
+    ['success', 'info', 'warning', 'error'].forEach(type => {
+      hookApiRef.current[type] = (props: NotificationProps) =>
+        hookApiRef.current.open({
+          ...props,
+          type
+        })
+    })
+    // TODO: add context support
     return [
-      null,
+      hookApiRef.current,
       null
     ]
-
   }
+  return useNotification;
 }
