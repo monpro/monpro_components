@@ -5,6 +5,7 @@ import Upload, { UploadProps } from './upload'
 import { render, RenderResult, fireEvent, wait } from '@testing-library/react'
 
 jest.mock('../Icon/icon', () => {
+  // @ts-ignore
   return ({ icon, onClick }) => {
     return <span onClick={onClick}>{icon}</span>
   }
