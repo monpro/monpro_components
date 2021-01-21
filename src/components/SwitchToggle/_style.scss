@@ -74,10 +74,10 @@
     transition: all 0.3s ease-in 0s;
   }
   &-checkbox:checked + &-label {
-    .toggle-switch-inner {
+    .mon-toggle-switch-inner {
       margin-left: 0;
     }
-    .toggle-switch-switch {
+    .mon-toggle-switch-switch {
       right: 0px;
     }
   }
