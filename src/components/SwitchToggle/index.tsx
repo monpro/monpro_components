@@ -1,3 +1,3 @@
-import SwitchToggle from './switch'
+import SwitchToggle from './switchToggle'
 
 export default SwitchToggle
