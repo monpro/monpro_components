@@ -3,7 +3,7 @@ import Notification from 'rc-notification'
 import { NotificationInstance as RCNotificationInstance } from 'rc-notification/lib/Notification'
 import classNames from 'classnames'
 import Icon from '../Icon/icon'
-import {typeToIcon} from './const'
+import { typeToIcon } from './const'
 
 export type NotificationLocation =
   | 'topLeft'
@@ -287,11 +287,11 @@ const api: any = {
   destroy: destroyApi,
 }
 const notificationType: IconType[] = ['success', 'info', 'warning', 'error']
-notificationType.forEach(type => {
+notificationType.forEach((type) => {
   api[type] = (props: NotificationProps) =>
     api.open({
       ...props,
-      type
+      type,
     })
 })
 
